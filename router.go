@@ -8,6 +8,7 @@ import (
 type Router interface {
 	http.Handler
 	HandleFunc(s string, f func(http.ResponseWriter, *http.Request)) Route
+	Handle(path string, handler http.Handler) Route
 }
 
 type Route interface {
@@ -32,6 +33,11 @@ type router struct {
 
 func (r *router) HandleFunc(s string, f func(http.ResponseWriter, *http.Request)) Route {
 	muxRoute := r.router.HandleFunc(s, f)
+	return &route{route: muxRoute}
+}
+
+func (r *router) Handle(path string, handler http.Handler) Route {
+	muxRoute := r.router.Handle(path, handler)
 	return &route{route: muxRoute}
 }
 
