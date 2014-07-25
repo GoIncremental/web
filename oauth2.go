@@ -23,7 +23,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/golang/oauth2"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/golang/oauth2"
 )
 
 const (

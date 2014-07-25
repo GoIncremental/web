@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/goincremental/dal"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/goincremental/dal"
 	"net/http"
 )
 
@@ -11,12 +11,11 @@ type Session struct {
 	Options *Options
 	IsNew   bool
 	name    string
-  written bool
+	written bool
 }
 
-
-func (s *Session) Get(key interface{}) interface {} {
-  return s.Values[key]
+func (s *Session) Get(key interface{}) interface{} {
+	return s.Values[key]
 }
 
 func (s *Session) Set(key interface{}, val interface{}) {

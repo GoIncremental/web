@@ -1,0 +1,49 @@
+{
+	"ImportPath": "github.com/goincremental/web",
+	"GoVersion": "go1.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/codegangsta/negroni",
+			"Comment": "v0.1-19-g61df96f",
+			"Rev": "61df96f40f1a6d7e0439f4c8b87c25434dd2c18f"
+		},
+		{
+			"ImportPath": "github.com/goincremental/dal",
+			"Comment": "v0.2.0",
+			"Rev": "c3d951003981b0452c8ec663ca26f305af281544"
+		},
+		{
+			"ImportPath": "github.com/golang/oauth2",
+			"Rev": "067c73f77e759593ad6c2f10b8215fa746cb0b29"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "14f550f51af52180c2eefed15e5fd18d63c0a64a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "14cafe28513321476c73967a5a4f3454b6129c46"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Rev": "1b0c7f6e9ab3d7f500fd7d50c7ad835ff428139b"
+		},
+		{
+			"ImportPath": "github.com/gorilla/sessions",
+			"Rev": "aa5e036e6c44aec69a32eb41097001978b29ad31"
+		},
+		{
+			"ImportPath": "github.com/joho/godotenv",
+			"Rev": "aab3ea4ba68f8fe7492604240b01190d9efc4db4"
+		},
+		{
+			"ImportPath": "github.com/unrolled/render",
+			"Rev": "76e3c7d028e855844505b8fd79fcdba05a21d7de"
+		},
+		{
+			"ImportPath": "labix.org/v2/mgo",
+			"Comment": "275",
+			"Rev": "gustavo@niemeyer.net-20140501184651-975yyw9ipld92pji"
+		}
+	]
+}

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/joho/godotenv"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/joho/godotenv"
 	"log"
 )
 

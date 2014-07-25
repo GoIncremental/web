@@ -2,9 +2,9 @@ package web
 
 import (
 	"errors"
-	"github.com/goincremental/dal"
-	"github.com/gorilla/securecookie"
-	"github.com/gorilla/sessions"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/goincremental/dal"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/gorilla/securecookie"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/gorilla/sessions"
 	"net/http"
 	"time"
 )

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/codegangsta/negroni"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/codegangsta/negroni"
 	"net/http"
 )
 

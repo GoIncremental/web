@@ -1,8 +1,8 @@
 package web
 
 import (
-	"github.com/goincremental/dal"
-	"github.com/gorilla/context"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/goincremental/dal"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/gorilla/context"
 	"net/http"
 )
 

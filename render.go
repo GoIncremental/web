@@ -2,7 +2,7 @@ package web
 
 import (
 	"encoding/xml"
-	"github.com/unrolled/render"
+	"github.com/goincremental/web/Godeps/_workspace/src/github.com/unrolled/render"
 	"html/template"
 	"net/http"
 	"strconv"
