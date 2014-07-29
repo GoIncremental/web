@@ -3,14 +3,31 @@
 	"GoVersion": "go1.3",
 	"Deps": [
 		{
+			"ImportPath": "github.com/boj/redistore",
+			"Comment": "v1",
+			"Rev": "9d1554b400d726c7aa54b6e4a836f273b72b97f7"
+		},
+		{
 			"ImportPath": "github.com/codegangsta/negroni",
 			"Comment": "v0.1-19-g61df96f",
 			"Rev": "61df96f40f1a6d7e0439f4c8b87c25434dd2c18f"
 		},
 		{
+			"ImportPath": "github.com/garyburd/redigo/redis",
+			"Rev": "6628c86d6a89ce7983c7c9b5e98c1df795fbd256"
+		},
+		{
 			"ImportPath": "github.com/goincremental/dal",
 			"Comment": "v0.2.0",
 			"Rev": "c3d951003981b0452c8ec663ca26f305af281544"
+		},
+		{
+			"ImportPath": "github.com/goincremental/negroni-oauth2",
+			"Rev": "9ef2b7b3fbbbfbf1fe9a6c65f94f73505c2d1ca9"
+		},
+		{
+			"ImportPath": "github.com/goincremental/negroni-sessions",
+			"Rev": "20a35ad01a3e66779ce6b376946a38ea963c461a"
 		},
 		{
 			"ImportPath": "github.com/golang/oauth2",

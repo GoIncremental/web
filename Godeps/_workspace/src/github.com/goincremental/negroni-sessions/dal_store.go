@@ -1,7 +1,6 @@
-package web
+package sessions
 
 import (
-	"errors"
 	"github.com/goincremental/web/Godeps/_workspace/src/github.com/goincremental/dal"
 	"github.com/goincremental/web/Godeps/_workspace/src/github.com/gorilla/securecookie"
 	"github.com/goincremental/web/Godeps/_workspace/src/github.com/gorilla/sessions"
@@ -9,56 +8,8 @@ import (
 	"time"
 )
 
-var (
-	ErrInvalidId       = errors.New("session: invalid session id")
-	ErrInvalidModified = errors.New("mongostore: invalid modified value")
-)
+func NewDalStore(c dal.Collection, maxAge int, ensureTTL bool, keyPairs ...[]byte) Store {
 
-type tokenGetSeter interface {
-	getToken(req *http.Request, name string) (string, error)
-	setToken(rw http.ResponseWriter, name, value string, options *sessions.Options)
-}
-
-type cookieToken struct{}
-
-func (c *cookieToken) getToken(req *http.Request, name string) (string, error) {
-	cook, err := req.Cookie(name)
-	if err != nil {
-		return "", err
-	}
-
-	return cook.Value, nil
-}
-
-func (c *cookieToken) setToken(rw http.ResponseWriter, name string, value string,
-	options *sessions.Options) {
-	http.SetCookie(rw, sessions.NewCookie(name, value, options))
-}
-
-func gorilla2session(gs *sessions.Session) *Session {
-	return &Session{
-		ID:     gs.ID,
-		Values: gs.Values,
-		Options: &Options{
-			Path:     gs.Options.Path,
-			Domain:   gs.Options.Domain,
-			MaxAge:   gs.Options.MaxAge,
-			Secure:   gs.Options.Secure,
-			HttpOnly: gs.Options.HttpOnly,
-		},
-		IsNew: gs.IsNew,
-		name:  gs.Name(),
-	}
-}
-
-// Session object store via dal
-type dalSession struct {
-	Id       dal.ObjectId `bson:"_id,omitempty"`
-	Data     string
-	Modified time.Time
-}
-
-func newDalStore(c dal.Collection, maxAge int, ensureTTL bool, keyPairs ...[]byte) *dalStore {
 	if ensureTTL {
 		c.EnsureIndex(dal.Index{
 			Key:         []string{"modified"},
@@ -69,41 +20,32 @@ func newDalStore(c dal.Collection, maxAge int, ensureTTL bool, keyPairs ...[]byt
 	}
 	return &dalStore{
 		Codecs: securecookie.CodecsFromPairs(keyPairs...),
-		Options: &sessions.Options{
-			MaxAge: maxAge,
-		},
-		Token: &cookieToken{},
-		coll:  c,
+		Token:  &cookieToken{},
+		coll:   c,
 	}
+}
+
+func (d *dalStore) Options(options Options) {
+	d.options = &sessions.Options{
+		Path:     options.Path,
+		Domain:   options.Domain,
+		MaxAge:   options.MaxAge,
+		Secure:   options.Secure,
+		HttpOnly: options.HttpOnly,
+	}
+}
+
+type dalSession struct {
+	Id       dal.ObjectId `bson:"_id,omitempty"`
+	Data     string
+	Modified time.Time
 }
 
 type dalStore struct {
 	Codecs  []securecookie.Codec
-	Options *sessions.Options
 	Token   tokenGetSeter
 	coll    dal.Collection
-}
-
-func (m *dalStore) fromSession(s *Session) *sessions.Session {
-	gsess := sessions.NewSession(m, s.name)
-	gsess.ID = s.ID
-	gsess.Values = s.Values
-	gsess.Options = m.Options
-	gsess.IsNew = s.IsNew
-	return gsess
-}
-
-//Implementation of web.SessionStore Interface
-func (m *dalStore) GetSession(r *http.Request, name string) (s *Session, err error) {
-	gsess, err := m.Get(r, name)
-	if err == nil {
-		s = gorilla2session(gsess)
-	}
-	return
-}
-
-func (m *dalStore) SaveSession(r *http.Request, w http.ResponseWriter, session *Session) error {
-	return m.Save(r, w, m.fromSession(session))
+	options *sessions.Options
 }
 
 //Implementation of gorilla/sessions.Store interface
@@ -117,8 +59,8 @@ func (m *dalStore) Get(r *http.Request, name string) (*sessions.Session, error) 
 func (m *dalStore) New(r *http.Request, name string) (*sessions.Session, error) {
 	session := sessions.NewSession(m, name)
 	session.Options = &sessions.Options{
-		Path:   m.Options.Path,
-		MaxAge: m.Options.MaxAge,
+		Path:   m.options.Path,
+		MaxAge: m.options.MaxAge,
 	}
 	session.IsNew = true
 	var err error

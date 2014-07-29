@@ -1,3 +1,17 @@
+// Copyright 2014 GoIncremental Limited. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package web
 
 import (
@@ -6,11 +20,11 @@ import (
 	"net/http"
 )
 
-func getContext(r *http.Request, key interface{}) interface{} {
+func GetContext(r *http.Request, key interface{}) interface{} {
 	return context.Get(r, key)
 }
 
-func setContext(r *http.Request, key, val interface{}) {
+func SetContext(r *http.Request, key, val interface{}) {
 	context.Set(r, key, val)
 }
 
@@ -22,45 +36,23 @@ const sessionKey contextKey = 5
 const sessionStoreKey contextKey = 6
 
 func GetDb(r *http.Request) dal.Database {
-	if rv := getContext(r, dbKey); rv != nil {
+	if rv := GetContext(r, dbKey); rv != nil {
 		return rv.(dal.Database)
 	}
 	return nil
 }
 
 func SetDb(r *http.Request, val dal.Database) {
-	setContext(r, dbKey, val)
+	SetContext(r, dbKey, val)
 }
 
 func GetRenderer(r *http.Request) Renderer {
-	if rv := getContext(r, rendererKey); rv != nil {
+	if rv := GetContext(r, rendererKey); rv != nil {
 		return rv.(Renderer)
 	}
 	return nil
 }
 
 func SetRenderer(r *http.Request, val Renderer) {
-	setContext(r, rendererKey, val)
-}
-
-func GetSession(r *http.Request) *Session {
-	if rv := getContext(r, sessionKey); rv != nil {
-		return rv.(*Session)
-	}
-	return nil
-}
-
-func SetSession(r *http.Request, val *Session) {
-	setContext(r, sessionKey, val)
-}
-
-func GetSessionStore(r *http.Request) SessionStore {
-	if rv := getContext(r, sessionStoreKey); rv != nil {
-		return rv.(SessionStore)
-	}
-	return nil
-}
-
-func SetSessionStore(r *http.Request, val SessionStore) {
-	setContext(r, sessionStoreKey, val)
+	SetContext(r, rendererKey, val)
 }
