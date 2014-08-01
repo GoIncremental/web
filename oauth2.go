@@ -19,30 +19,56 @@ import (
 )
 
 // Returns a new Google OAuth 2.0 backend endpoint.
-func Google(opts *oauth2.Options) Middleware {
-	return oauth2.Google(opts)
-}
-
-// Returns a new Github OAuth 2.0 backend endpoint.
-func Github(opts *oauth2.Options) Middleware {
-	return oauth2.Github(opts)
-}
-
-func Facebook(opts *oauth2.Options) Middleware {
-	return oauth2.Facebook(opts)
-}
-
-func LinkedIn(opts *oauth2.Options) Middleware {
-	return oauth2.LinkedIn(opts)
+func Google(opts *OAuth2Options) Middleware {
+	authUrl := "https://accounts.google.com/o/oauth2/auth"
+	tokenUrl := "https://accounts.google.com/o/oauth2/token"
+	return NewOAuth2Provider(opts, authUrl, tokenUrl)
 }
 
 // Returns a generic OAuth 2.0 backend endpoint.
-func NewOAuth2Provider(opts *oauth2.Options, authUrl, tokenUrl string) Middleware {
-	return oauth2.NewOAuth2Provider(opts, authUrl, tokenUrl)
+func NewOAuth2Provider(opts *OAuth2Options, authUrl, tokenUrl string) Middleware {
+	options := &oauth2.Options{
+		ClientID:       opts.ClientID,
+		ClientSecret:   opts.ClientSecret,
+		RedirectURL:    opts.RedirectURL,
+		Scopes:         opts.Scopes,
+		AccessType:     opts.AccessType,
+		ApprovalPrompt: opts.ApprovalPrompt,
+	}
+	return oauth2.NewOAuth2Provider(options, authUrl, tokenUrl)
 }
 
 // Handler that redirects user to the login page
 // if user is not logged in.
 func LoginRequired() Middleware {
 	return MiddlewareFunc(oauth2.LoginRequired())
+}
+
+type OAuth2Options struct {
+	// ClientID is the OAuth client identifier used when communicating with
+	// the configured OAuth provider.
+	ClientID string `json:"client_id"`
+
+	// ClientSecret is the OAuth client secret used when communicating with
+	// the configured OAuth provider.
+	ClientSecret string `json:"client_secret"`
+
+	// RedirectURL is the URL to which the user will be returned after
+	// granting (or denying) access.
+	RedirectURL string `json:"redirect_url"`
+
+	// Optional, identifies the level of access being requested.
+	Scopes []string `json:"scopes"`
+
+	// Optional, "online" (default) or "offline", no refresh token if "online"
+	AccessType string `json:"omit"`
+
+	// ApprovalPrompt indicates whether the user should be
+	// re-prompted for consent. If set to "auto" (default) the
+	// user will be prompted only if they haven't previously
+	// granted consent and the code can only be exchanged for an
+	// access token.
+	// If set to "force" the user will always be prompted, and the
+	// code can be exchanged for a refresh token.
+	ApprovalPrompt string `json:"omit"`
 }
