@@ -15,17 +15,20 @@
 package web
 
 import (
-	"github.com/goincremental/web/Godeps/_workspace/src/github.com/codegangsta/negroni"
 	"net/http"
+
+	"github.com/codegangsta/negroni"
 )
 
 type Middleware interface {
 	ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 }
 
-type MiddlewareFunc func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc)
+type MiddlewareFunc func(rw http.ResponseWriter, r *http.Request,
+	next http.HandlerFunc)
 
-func (h MiddlewareFunc) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+func (h MiddlewareFunc) ServeHTTP(rw http.ResponseWriter, r *http.Request,
+	next http.HandlerFunc) {
 	h(rw, r, next)
 }
 

@@ -15,9 +15,10 @@
 package web
 
 import (
-	"github.com/goincremental/web/Godeps/_workspace/src/github.com/goincremental/dal"
-	"github.com/goincremental/web/Godeps/_workspace/src/github.com/gorilla/context"
 	"net/http"
+
+	"github.com/goincremental/dal"
+	"github.com/gorilla/context"
 )
 
 func GetContext(r *http.Request, key interface{}) interface{} {

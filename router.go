@@ -15,7 +15,7 @@
 package web
 
 import (
-	"github.com/goincremental/web/Godeps/_workspace/src/github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 

@@ -14,24 +14,10 @@
 
 package web
 
-import "github.com/joho/godotenv"
+import (
+	"github.com/phyber/negroni-gzip/gzip"
+)
 
-type Environment interface {
-	Load(filenames ...string) error
-}
-
-type environment struct{}
-
-func (e *environment) Load(s ...string) (err error) {
-	err = godotenv.Load(s...)
-	return
-}
-
-func newEnvironment() Environment {
-	return &environment{}
-}
-
-func LoadEnv() error {
-	env := newEnvironment()
-	return env.Load()
+func Gzip() Middleware {
+	return gzip.Gzip(gzip.DefaultCompression)
 }

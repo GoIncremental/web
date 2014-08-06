@@ -15,11 +15,13 @@
 package web
 
 import (
-	"github.com/goincremental/web/Godeps/_workspace/src/github.com/goincremental/negroni-oauth2"
+	"net/http"
+
+	oauth2 "github.com/goincremental/negroni-oauth2"
 )
 
 // Returns a new Google OAuth 2.0 backend endpoint.
-func Google(opts *OAuth2Options) Middleware {
+func GoogleOLD(opts *OAuth2Options) Middleware {
 	authUrl := "https://accounts.google.com/o/oauth2/auth"
 	tokenUrl := "https://accounts.google.com/o/oauth2/token"
 	return NewOAuth2Provider(opts, authUrl, tokenUrl)
@@ -42,6 +44,15 @@ func NewOAuth2Provider(opts *OAuth2Options, authUrl, tokenUrl string) Middleware
 // if user is not logged in.
 func LoginRequired() Middleware {
 	return MiddlewareFunc(oauth2.LoginRequired())
+}
+
+type OAuthToken interface {
+	Access() string
+	ExtraData() map[string]string
+}
+
+func GetOAuth2Token(r *http.Request) OAuthToken {
+	return oauth2.GetToken(r)
 }
 
 type OAuth2Options struct {
