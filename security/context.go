@@ -17,8 +17,8 @@ func SetUser(r *http.Request, val *models.User) {
 
 func GetUser(r *http.Request) *models.User {
 	if u := web.GetContext(r, userKey); u != nil {
-		user := u.(models.User)
-		return &user
+		user := u.(*models.User)
+		return user
 	}
 	return nil
 }
