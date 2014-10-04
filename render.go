@@ -16,16 +16,18 @@ package web
 
 import (
 	"encoding/xml"
-	"github.com/unrolled/render"
 	"html/template"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/unrolled/render"
 )
 
 type Renderer interface {
 	XML(w http.ResponseWriter, status int, v interface{})
 	HTML(w http.ResponseWriter, status int, name string, binding interface{})
+	JSON(w http.ResponseWriter, status int, v interface{})
 }
 
 type renderer struct {
@@ -38,6 +40,10 @@ func (r *renderer) HTML(w http.ResponseWriter, status int, name string, binding 
 
 func (r *renderer) XML(w http.ResponseWriter, status int, v interface{}) {
 	r.renderer.XML(w, status, v)
+}
+
+func (r *renderer) JSON(w http.ResponseWriter, status int, v interface{}) {
+	r.renderer.JSON(w, status, v)
 }
 
 func getDateString(d time.Time) string {
