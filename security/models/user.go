@@ -51,8 +51,12 @@ func GetUserByID(db dal.Database, systemID *dal.ObjectID,
 }
 
 //Save persists the user to the database through the dal
-func (u *User) Save(db dal.Database) error {
+func (u *User) Save(db dal.Database) (err error) {
 	col := db.C(userCollection)
-	_, err := col.UpsertID(u, u)
+	if !u.ID.Valid() {
+		u.ID = dal.NewObjectId()
+	}
+	_, err = col.UpsertID(u.ID, u)
+
 	return err
 }
