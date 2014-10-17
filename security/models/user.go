@@ -54,7 +54,7 @@ func GetUserByID(db dal.Database, systemID *dal.ObjectID,
 func (u *User) Save(db dal.Database) (err error) {
 	col := db.C(userCollection)
 	if !u.ID.Valid() {
-		u.ID = dal.NewObjectId()
+		u.ID = dal.NewObjectID()
 	}
 	_, err = col.UpsertID(u.ID, u)
 
