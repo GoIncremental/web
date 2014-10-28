@@ -21,6 +21,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/goincremental/dal"
 	"github.com/unrolled/render"
 )
 
@@ -49,25 +50,31 @@ func (r *renderer) JSON(w http.ResponseWriter, status int, v interface{}) {
 func getDateString(d time.Time) string {
 	if d.IsZero() {
 		return "Date TBC"
-	} else {
-		year, month, day := d.Date()
-		suffix := "th"
-		switch day % 10 {
-		case 1:
-			if day%100 != 11 {
-				suffix = "st"
-			}
-		case 2:
-			if day%100 != 12 {
-				suffix = "nd"
-			}
-		case 3:
-			if day%100 != 13 {
-				suffix = "rd"
-			}
-		}
-		return d.Weekday().String() + " " + strconv.Itoa(day) + suffix + " " + month.String() + " " + strconv.Itoa(year)
 	}
+
+	year, month, day := d.Date()
+	suffix := "th"
+	switch day % 10 {
+	case 1:
+		if day%100 != 11 {
+			suffix = "st"
+		}
+	case 2:
+		if day%100 != 12 {
+			suffix = "nd"
+		}
+	case 3:
+		if day%100 != 13 {
+			suffix = "rd"
+		}
+	}
+	return d.Weekday().String() + " " + strconv.Itoa(day) + suffix + " " +
+		month.String() + " " + strconv.Itoa(year)
+
+}
+
+func getID(ID dal.ObjectID) string {
+	return ID.Hex()
 }
 
 func NewRenderer() Renderer {
@@ -81,6 +88,7 @@ func NewRenderer() Renderer {
 					return template.HTML(s)
 				},
 				"AsDate": getDateString,
+				"AsID":   getID,
 			},
 		},
 	})
