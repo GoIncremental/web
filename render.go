@@ -77,6 +77,10 @@ func getID(ID dal.ObjectID) string {
 	return ID.Hex()
 }
 
+func add(x, y int) int {
+	return x + y
+}
+
 func NewRenderer() Renderer {
 	r := render.New(render.Options{
 		Layout:    "index",
@@ -89,6 +93,7 @@ func NewRenderer() Renderer {
 				},
 				"AsDate": getDateString,
 				"AsID":   getID,
+				"Add":    add,
 			},
 		},
 	})
