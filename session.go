@@ -18,7 +18,8 @@ import (
 	"net/http"
 
 	"github.com/goincremental/dal"
-	sessions "github.com/goincremental/negroni-sessions"
+	"github.com/goincremental/negroni-sessions"
+	"github.com/goincremental/negroni-sessions/dalstore"
 )
 
 type Session interface {
@@ -38,8 +39,8 @@ func GetSession(req *http.Request) Session {
 	return sessions.GetSession(req)
 }
 
-// NewSessionStore returns a new SessionStore (currently uses default dal implementation)
+// NewSessionStore returns a new SessionStore (currently uses default dalstore implementation)
 // Set ensureTTL to true let the database auto-remove expired object by maxAge.
 func NewSessionStore(c dal.Connection, database string, collection string, maxAge int, ensureTTL bool, keyPairs ...[]byte) Store {
-	return sessions.NewDalStore(c, database, collection, maxAge, ensureTTL, keyPairs...)
+	return dalstore.New(c, database, collection, maxAge, ensureTTL, keyPairs...)
 }

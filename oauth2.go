@@ -16,6 +16,7 @@ package web
 
 import (
 	"net/http"
+	"time"
 
 	oauth2 "github.com/goincremental/negroni-oauth2"
 )
@@ -29,13 +30,11 @@ func GoogleOLD(opts *OAuth2Options) Middleware {
 
 // Returns a generic OAuth 2.0 backend endpoint.
 func NewOAuth2Provider(opts *OAuth2Options, authUrl, tokenUrl string) Middleware {
-	options := &oauth2.Options{
-		ClientID:       opts.ClientID,
-		ClientSecret:   opts.ClientSecret,
-		RedirectURL:    opts.RedirectURL,
-		Scopes:         opts.Scopes,
-		AccessType:     opts.AccessType,
-		ApprovalPrompt: opts.ApprovalPrompt,
+	options := &oauth2.Config{
+		ClientID:     opts.ClientID,
+		ClientSecret: opts.ClientSecret,
+		RedirectURL:  opts.RedirectURL,
+		Scopes:       opts.Scopes,
 	}
 	return oauth2.NewOAuth2Provider(options, authUrl, tokenUrl)
 }
@@ -48,7 +47,10 @@ func LoginRequired() Middleware {
 
 type OAuthToken interface {
 	Access() string
-	ExtraData() map[string]string
+	Refresh() string
+	Expired() bool
+	ExpiryTime() time.Time
+	ExtraData(string) string
 }
 
 func GetOAuth2Token(r *http.Request) OAuthToken {
@@ -70,16 +72,4 @@ type OAuth2Options struct {
 
 	// Optional, identifies the level of access being requested.
 	Scopes []string `json:"scopes"`
-
-	// Optional, "online" (default) or "offline", no refresh token if "online"
-	AccessType string `json:"omit"`
-
-	// ApprovalPrompt indicates whether the user should be
-	// re-prompted for consent. If set to "auto" (default) the
-	// user will be prompted only if they haven't previously
-	// granted consent and the code can only be exchanged for an
-	// access token.
-	// If set to "force" the user will always be prompted, and the
-	// code can be exchanged for a refresh token.
-	ApprovalPrompt string `json:"omit"`
 }

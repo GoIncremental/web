@@ -84,17 +84,17 @@ func decodeToken(idToken string) (gplusID string, err error) {
 func (g *googleAPI) LoginWithCode(code string) (GoogleUser, error) {
 	var valid = false
 
-	transport, err := g.config.NewTransportWithCode(code)
+	token, err := g.config.Exchange(nil, code)
 	if err != nil {
 		return nil, err
 	}
 
-	id, err := decodeToken(transport.Token().Extra["id_token"])
+	id, err := decodeToken(token.Extra("id_token"))
 	if err != nil {
 		return nil, err
 	}
 
-	client := &http.Client{Transport: transport}
+	client := g.config.Client(oauth2.NoContext, token)
 	service, err := plus.New(client)
 	getme := service.People.Get("me")
 	me, err := getme.Do()
@@ -138,19 +138,20 @@ func (g *googleUser) Valid() bool {
 // NewGoogleAPI creates a GoogleAPI object.  This should be created
 // once per web server, and then stored on the request using the SetGoogle
 // middleware
-func NewGoogleAPI(id string, secret string,
-	scopes []string) (GoogleAPI, error) {
+func NewGoogleAPI(id string, secret string, scopes []string) GoogleAPI {
 	authURL := "https://accounts.google.com/o/oauth2/auth"
 	tokenURL := "https://accounts.google.com/o/oauth2/token"
-	options := &oauth2.Options{
+	config := &oauth2.Config{
 		ClientID:     id,
 		ClientSecret: secret,
 		RedirectURL:  "postmessage",
-		Scopes:       scopes}
+		Scopes:       scopes,
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  authURL,
+			TokenURL: tokenURL,
+		}}
 
-	config, err := oauth2.NewConfig(options, authURL, tokenURL)
-
-	return &googleAPI{config: config}, err
+	return &googleAPI{config: config}
 }
 
 const googleAPIKey contextKey = 7
