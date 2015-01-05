@@ -48,9 +48,9 @@ func LoginRequired() Middleware {
 type OAuthToken interface {
 	Access() string
 	Refresh() string
-	Expired() bool
+	Valid() bool
 	ExpiryTime() time.Time
-	ExtraData(string) string
+	ExtraData(string) interface{}
 }
 
 func GetOAuth2Token(r *http.Request) OAuthToken {

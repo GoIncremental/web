@@ -89,7 +89,7 @@ func (g *googleAPI) LoginWithCode(code string) (GoogleUser, error) {
 		return nil, err
 	}
 
-	id, err := decodeToken(token.Extra("id_token"))
+	id, err := decodeToken(token.Extra("id_token").(string))
 	if err != nil {
 		return nil, err
 	}
