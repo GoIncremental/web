@@ -21,8 +21,8 @@ import (
 	"net/http"
 	"strings"
 
-	plus "code.google.com/p/google-api-go-client/plus/v1"
-	"github.com/golang/oauth2"
+	plus "github.com/google/google-api-go-client/plus/v1"
+	"golang.org/x/oauth2"
 )
 
 // GoogleAPI supports quering the google api to get login information about
