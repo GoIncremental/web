@@ -84,7 +84,9 @@ func decodeToken(idToken string) (gplusID string, err error) {
 func (g *googleAPI) LoginWithCode(code string) (GoogleUser, error) {
 	var valid = false
 
-	token, err := g.config.Exchange(nil, code)
+	fmt.Printf("%+v\n", g.config)
+
+	token, err := g.config.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		return nil, err
 	}
