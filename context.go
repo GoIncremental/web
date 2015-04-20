@@ -36,9 +36,10 @@ const rendererKey contextKey = 4
 const sessionKey contextKey = 5
 const sessionStoreKey contextKey = 6
 
-func GetDb(r *http.Request) dal.Database {
+func GetDb(r *http.Request) *dal.Database {
 	if rv := GetContext(r, dbKey); rv != nil {
-		return rv.(dal.Database)
+		db := rv.(dal.Database)
+		return &db
 	}
 	return nil
 }

@@ -25,9 +25,9 @@ type User struct {
 const userCollection string = "users"
 
 //GetUserByOAuthID allows a single user to be found by provider name and id
-func GetUserByOAuthID(db dal.Database, systemID *dal.ObjectID,
+func GetUserByOAuthID(db *dal.Database, systemID *dal.ObjectID,
 	id string) (result User, err error) {
-	users := db.C(userCollection)
+	users := (*db).C(userCollection)
 
 	err = users.Find(dal.BSON{
 		"systemId":           systemID,
@@ -38,9 +38,9 @@ func GetUserByOAuthID(db dal.Database, systemID *dal.ObjectID,
 }
 
 //GetUserByID allows retrieval of a user by its id and systemID
-func GetUserByID(db dal.Database, systemID *dal.ObjectID,
+func GetUserByID(db *dal.Database, systemID *dal.ObjectID,
 	id *dal.ObjectID) (result User, err error) {
-	users := db.C(userCollection)
+	users := (*db).C(userCollection)
 
 	err = users.Find(dal.BSON{
 		"systemId": systemID,
@@ -51,8 +51,8 @@ func GetUserByID(db dal.Database, systemID *dal.ObjectID,
 }
 
 //Save persists the user to the database through the dal
-func (u *User) Save(db dal.Database) (err error) {
-	col := db.C(userCollection)
+func (u *User) Save(db *dal.Database) (err error) {
+	col := (*db).C(userCollection)
 	if !u.ID.Valid() {
 		u.ID = dal.NewObjectID()
 	}
