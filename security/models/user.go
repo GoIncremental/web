@@ -29,7 +29,7 @@ func GetUserByOAuthID(db *dal.Database, systemID *dal.ObjectID,
 	id string) (result User, err error) {
 	users := (*db).C(userCollection)
 
-	err = users.Find(dal.BSON{
+	err = users.Find(dal.Q{
 		"systemId":           systemID,
 		"userIds.providerId": id},
 	).One(&result)
@@ -42,7 +42,7 @@ func GetUserByID(db *dal.Database, systemID *dal.ObjectID,
 	id *dal.ObjectID) (result User, err error) {
 	users := (*db).C(userCollection)
 
-	err = users.Find(dal.BSON{
+	err = users.Find(dal.Q{
 		"systemId": systemID,
 		"_id":      id},
 	).One(&result)
