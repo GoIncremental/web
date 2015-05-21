@@ -1,11 +1,16 @@
 package web
 
 import (
+	"errors"
 	"fmt"
-	"github.com/deferpanic/deferclient/deferstats"
-	"github.com/deferpanic/deferclient/errors"
 	"log"
 	"os"
+
+	"github.com/deferpanic/deferclient/deferstats"
+)
+
+var (
+	dfs *deferstats.Client
 )
 
 // NewLogger configures defer panic error and starts capturing stats.
@@ -19,8 +24,11 @@ func NewLogger() {
 }
 
 func logError(msg string) {
-	errors.New(msg)
-	log.Println(msg)
+	err := errors.New(msg)
+	if err != nil {
+		dfs.Wrap(err)
+		log.Println(err)
+	}
 }
 
 // LogError passes the error to deferpanic
