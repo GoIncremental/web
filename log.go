@@ -17,7 +17,7 @@ var (
 // It looks for DEFERPANIC_KEY,
 // DEVERPANIC_ENVIRONMENT and DEFERPANIC_APPGROUP environment vars
 func NewLogger() {
-	dfs := deferstats.NewClient(os.Getenv("DEFERPANIC_KEY"))
+	dfs = deferstats.NewClient(os.Getenv("DEFERPANIC_API_KEY"))
 	dfs.Setenvironment(os.Getenv("DEFERPANIC_ENVIRONMENT"))
 	dfs.SetappGroup(os.Getenv("DEFERPANIC_APPGROUP"))
 	go dfs.CaptureStats()
