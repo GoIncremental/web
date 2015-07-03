@@ -31,7 +31,7 @@ func newEnvironment() Environment {
 	return &environment{}
 }
 
-func LoadEnv() error {
+func LoadEnv(filenames ...string) error {
 	env := newEnvironment()
-	return env.Load()
+	return env.Load(filenames...)
 }
